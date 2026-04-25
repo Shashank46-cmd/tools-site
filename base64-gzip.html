@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Base64 + Gzip Decoder</title>
+  <script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    textarea { width: 100%; }
+    button {
+      padding: 10px 15px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<a href="index.html">⬅ Back to Home</a>
+
+<h2>Base64 + Gzip to CSV/Text</h2>
+
+<textarea id="input" rows="10" placeholder="Paste Base64 here"></textarea>
+
+<button onclick="decode()">Decode</button>
+
+<h3>Output:</h3>
+<textarea id="output" rows="10"></textarea>
+
+<script>
+function decode() {
+  try {
+    let base64 = document.getElementById("input").value.trim();
+
+    let binary = atob(base64);
+    let bytes = new Uint8Array(binary.length);
+
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+
+    let decompressed = pako.inflate(bytes, { to: 'string' });
+
+    document.getElementById("output").value = decompressed;
+  } catch (e) {
+    alert("Error decoding. Check input.");
+  }
+}
+</script>
+
+</body>
+</html>
